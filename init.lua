@@ -32,7 +32,6 @@ end)
 minetest.register_chatcommand("news", {
 	description = "Shows server news to the player",
 	func = function (name)
-		local player = minetest.get_player_by_name(name)
-		minetest.show_formspec(name, "news", get_formspec())	
+		minetest.show_formspec(name, "news", get_formspec())
 	end
 })
