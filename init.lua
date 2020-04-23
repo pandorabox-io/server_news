@@ -6,16 +6,15 @@ minetest.register_privilege("news_bypass", {
 -- create formspec from text file
 local function get_formspec()
 	local news_file = io.open(minetest.get_worldpath().."/news.txt", "r")
-	local news_fs = 'size[12,8.25]'..
-		"button_exit[-0.05,7.8;2,1;exit;Close]"
 	if news_file then
 		local news = news_file:read("*a")
 		news_file:close()
-		news_fs = news_fs.."textarea[0.25,0;12.1,9;news;;"..minetest.formspec_escape(news).."]"
+		return 'size[12,8.25]'..
+			"button_exit[-0.05,7.8;2,1;exit;Close]" ..
+			"textarea[0.25,0;12.1,9;news;;"..minetest.formspec_escape(news).."]"
 	else
-		news_fs = news_fs.."textarea[0.25,0;12.1,9;news;;No current news.]"
+		return
 	end
-	return news_fs
 end
 
 -- show news formspec on player join, unless player has bypass priv
@@ -24,7 +23,10 @@ minetest.register_on_joinplayer(function (player)
 	if minetest.get_player_privs(name).news_bypass then
 		return
 	else
-		minetest.show_formspec(name, "news", get_formspec())
+		local fs = get_formspec()
+		if fs then
+			minetest.show_formspec(name, "news", fs)
+		end
 	end
 end)
 
