@@ -1,8 +1,4 @@
 
--- register bypass priv
-minetest.register_privilege("news_bypass", {
-	description = "Skip the news.", give_to_singleplayer = false})
-
 -- create formspec from text file
 local function get_formspec()
 	local news_file = io.open(minetest.get_worldpath().."/news.txt", "r")
@@ -17,16 +13,11 @@ local function get_formspec()
 	end
 end
 
--- show news formspec on player join, unless player has bypass priv
 minetest.register_on_joinplayer(function (player)
 	local name = player:get_player_name()
-	if minetest.get_player_privs(name).news_bypass then
-		return
-	else
-		local fs = get_formspec()
-		if fs then
-			minetest.show_formspec(name, "news", fs)
-		end
+	local fs = get_formspec()
+	if fs then
+		minetest.show_formspec(name, "news", fs)
 	end
 end)
 
