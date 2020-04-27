@@ -22,11 +22,12 @@ minetest.register_on_joinplayer(function (player)
 end)
 
 -- command to display server news at any time
---[[
 minetest.register_chatcommand("news", {
 	description = "Shows server news to the player",
 	func = function (name)
-		minetest.show_formspec(name, "news", get_formspec())
+		local fs = get_formspec()
+		if fs then
+			minetest.show_formspec(name, "news", fs)
+		end
 	end
 })
-]]
